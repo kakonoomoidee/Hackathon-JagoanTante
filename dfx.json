@@ -1,0 +1,26 @@
+{
+  "canisters": {
+    "Hackathon-JagoanTante-backend": {
+      "main": "src/Hackathon-JagoanTante-backend/main.mo",
+      "type": "motoko"
+    },
+    "Hackathon-JagoanTante-frontend": {
+      "dependencies": [
+        "Hackathon-JagoanTante-backend"
+      ],
+      "source": [
+        "src/Hackathon-JagoanTante-frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "Hackathon-JagoanTante-frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
