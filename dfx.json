@@ -1,18 +1,14 @@
 {
   "canisters": {
-    "Hackathon-JagoanTante-backend": {
-      "main": "src/Hackathon-JagoanTante-backend/main.mo",
+    "backend": {
+      "main": "src/backend/main.mo",
       "type": "motoko"
     },
-    "Hackathon-JagoanTante-frontend": {
-      "dependencies": [
-        "Hackathon-JagoanTante-backend"
-      ],
-      "source": [
-        "src/Hackathon-JagoanTante-frontend/dist"
-      ],
+    "frontend": {
+      "dependencies": ["backend"],
+      "source": ["src/frontend/dist"],
       "type": "assets",
-      "workspace": "Hackathon-JagoanTante-frontend"
+      "workspace": "frontend"
     }
   },
   "defaults": {
