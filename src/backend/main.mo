@@ -1,22 +1,26 @@
-//Hackathon-JagoanTante/src/backend/main.mo
 import ContractService "contract";
+import Types "types";
 
 actor Main {
-  let service = ContractService.ContractService();
+
+  let getService = ContractService.ContractService;
 
   public shared ({ caller }) func createContract(
     name: Text,
     description: Text,
     participants: [Principal]
   ) : async Nat {
+    let service = await getService();
     await service.createContract(caller, name, description, participants);
   };
 
   public shared ({ caller }) func sign(id: Nat) : async () {
+    let service = await getService();
     await service.signContract(id, caller);
   };
 
-  public query func list() : async [ContractService.Types.Contract] {
-    await service.getContracts();
-  };
+public shared func list() : async [Types.Contract] {
+  let service = await getService();
+  await service.getContracts();
+};
 }
