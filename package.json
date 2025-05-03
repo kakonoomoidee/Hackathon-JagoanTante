@@ -14,5 +14,9 @@
   "type": "module",
   "workspaces": [
     "src/Hackathon-JagoanTante-frontend"
-  ]
+  ],
+  "dependencies": {
+    "glob": "^11.0.2",
+    "rimraf": "^6.0.1"
+  }
 }
