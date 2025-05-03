@@ -1,18 +1,24 @@
-//hackathon/Hackathon-JagoanTante/src/backend/contract.mo
 import Map "mo:map/Map";
 import Hash "mo:base/Hash";
+import Nat32 "mo:base/Nat32";
 import Nat "mo:base/Nat";
 import Principal "mo:base/Principal";
 import Array "mo:base/Array";
 import Iter "mo:base/Iter";
 import Debug "mo:base/Debug";
+import Bool "mo:base/Bool";
 import Types "types";
 
 shared({}) actor class ContractService() = this {
 
   stable var currentId : Nat = 0;
-  let natHash = func(n : Nat) : Hash.Hash { Nat.hash(n) };
-  let natEqual = func(a : Nat, b : Nat) : Bool { a == b };
+
+  let hashUtils : (Nat -> Hash.Hash, (Nat, Nat) -> Bool) = (
+  func (x : Nat) : Hash.Hash = Nat32.fromNat(x),
+  func (x : Nat, y : Nat) : Bool = x == y
+);
+
+
   stable var contractsMap = Map.new<Nat, Types.Contract>();
 
   public shared func createContract(
@@ -34,12 +40,12 @@ shared({}) actor class ContractService() = this {
       finalized = false;
     };
 
-    ignore Map.put(contractsMap, natHash, natEqual, id, newContract);
+    ignore Map.put(contractsMap, hashUtils, id, newContract);
     id
   };
 
   public shared func signContract(id: Nat, caller: Principal) : async () {
-    switch (Map.get(contractsMap, natHash, natEqual, id)) {
+    switch (Map.get(contractsMap, hashUtils, id)) {
       case null {
         Debug.trap("Kontrak tidak ditemukan.");
       };
@@ -48,22 +54,34 @@ shared({}) actor class ContractService() = this {
           Debug.trap("Kontrak sudah final.");
         };
 
-        let isParticipant = Array.find(contract.participants, func(p) { Principal.equal(p, caller) }) != null;
+        let isParticipant : Bool = Array.find<Principal>(
+  contract.participants,
+  func(p : Principal) : Bool {
+    Principal.equal(p, caller)
+  }
+) != null;
+
         if (not isParticipant) Debug.trap("Anda bukan peserta kontrak.");
 
-        let alreadySigned = Array.find(contract.signed, func(p) { Principal.equal(p, caller) }) != null;
+        let alreadySigned : Bool = Array.find<Principal>(
+  contract.signed,
+  func(p : Principal) : Bool {
+    Principal.equal(p, caller)
+  }
+) != null;
+
         if (alreadySigned) return;
 
-        let newSigned = Array.append(contract.signed, [caller]);
-        let isFinalNow = Array.size(newSigned) == Array.size(contract.participants);
+        let newSigned : [Principal] = Array.append(contract.signed, [caller]);
+        let isFinalNow : Bool = Array.size(newSigned) == Array.size(contract.participants);
 
-        let updated = {
+        let updated : Types.Contract = {
           contract with
           signed = newSigned;
           finalized = isFinalNow;
         };
 
-        ignore Map.put(contractsMap, natHash, natEqual, id, updated);
+        ignore Map.put(contractsMap, hashUtils, id, updated);
       }
     }
   };
