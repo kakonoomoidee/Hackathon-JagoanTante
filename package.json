@@ -13,7 +13,7 @@
   },
   "type": "module",
   "workspaces": [
-    "src/Hackathon-JagoanTante-frontend"
+    "src/frontend"
   ],
   "dependencies": {
     "glob": "^11.0.2",
