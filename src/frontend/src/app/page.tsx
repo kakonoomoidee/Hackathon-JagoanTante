@@ -50,24 +50,50 @@ export default function LandingPage() {
       },
       onError: (err) => {
         console.error("Login error:", err);
-        alert("Gagal login ke Internet Identity!");
+        alert("Failed to log in to Internet Identity!");
       },
     });
   };
 
   return (
-    <main className="flex justify-center items-center min-h-screen bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
-      <div className="text-center text-white px-6 py-12 max-w-lg mx-auto bg-opacity-70 backdrop-blur-lg rounded-lg shadow-lg">
-        <h1 className="text-4xl font-bold mb-4">Selamat Datang di Aplikasi Kontrak Digital</h1>
-        <p className="text-lg mb-6">
-          Dengan menggunakan Internet Identity, Anda dapat menandatangani kontrak digital secara aman dan terpercaya.
-        </p>
-        <button
-          onClick={handleLogin}
-          className="bg-indigo-600 px-8 py-3 rounded-xl text-lg font-semibold hover:bg-indigo-700 transition duration-300"
-        >
-          Login dengan Internet Identity
-        </button>
+    <main className="min-h-screen bg-black text-white px-6 py-16 flex items-center justify-center relative overflow-hidden">
+      {/* Background grid + glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(#00ffe055_1px,transparent_1px)] [background-size:24px_24px] z-0" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#020409] to-[#0f172a] opacity-80 z-0" />
+
+      <div className="relative z-10 max-w-7xl w-full flex flex-col md:flex-row items-center gap-20">
+        {/* Left Section */}
+        <div className="flex-1 space-y-8">
+          <h1 className="text-5xl font-bold leading-tight">
+            Welcome to <br />
+            <span className="text-cyan-400">ACTA</span>
+          </h1>
+          <p className="text-lg text-gray-300">
+            Acta is a digital contract platform built on Internet Computer, enabling secure, transparent, and permanent electronic signatures using blockchain technology.
+          </p>
+          <p className="text-gray-400 text-md">
+            Internet Identity is used for secure authentication. Signing and verification are handled via blockchain and crypto wallets for full decentralization.
+          </p>
+
+          <button
+            onClick={handleLogin}
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-indigo-600 px-6 py-3 rounded-full text-lg font-semibold hover:opacity-90 transition"
+          >
+            Get Started with Internet Identity →
+          </button>
+        </div>
+
+        {/* Right Section - Illustration */}
+        <div className="flex-1 relative">
+          <img
+            src="/acta-illustration.png"
+            alt="ACTA Digital Illustration"
+            className="w-[500px] drop-shadow-[0_0_60px_#00ffff44]"
+            style={{
+              animation: "pulse 4s ease-in-out infinite"
+            }}
+          />
+        </div>
       </div>
     </main>
   );
