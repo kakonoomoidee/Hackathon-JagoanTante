@@ -3,12 +3,12 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { AuthClient } from "@dfinity/auth-client";
 import { FaFileSignature } from 'react-icons/fa';
+import Footer from '@/components/footer';
 
 export default function Dashboard() {
   const [principal, setPrincipal] = useState<string | null>(null);
   const [contracts, setContracts] = useState<any[]>([]);
   const [history, setHistory] = useState<any[]>([]);
-  const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [activeTab, setActiveTab] = useState<"sign" | "signed">("sign");
   const router = useRouter();
 
@@ -176,9 +176,8 @@ export default function Dashboard() {
       </div>
 
       {/* Footer */}
-      <footer className="relative z-10 text-center text-gray-500 text-sm py-6 border-t border-gray-800">
-        © {new Date().getFullYear()} ACTA. All rights reserved.
-      </footer>
+      <Footer />
+
     </main>
   );
 }
