@@ -56,45 +56,61 @@ export default function LandingPage() {
   };
 
   return (
-    <main className="min-h-screen bg-black text-white px-6 py-16 flex items-center justify-center relative overflow-hidden">
-      {/* Background grid + glow */}
+    <main className="min-h-screen bg-black text-white flex flex-col relative overflow-hidden">
+      {/* Background glow */}
       <div className="absolute inset-0 bg-[radial-gradient(#00ffe055_1px,transparent_1px)] [background-size:24px_24px] z-0" />
       <div className="absolute inset-0 bg-gradient-to-br from-[#020409] to-[#0f172a] opacity-80 z-0" />
 
-      <div className="relative z-10 max-w-7xl w-full flex flex-col md:flex-row items-center gap-20">
-        {/* Left Section */}
-        <div className="flex-1 space-y-8">
-          <h1 className="text-5xl font-bold leading-tight">
-            Welcome to <br />
-            <span className="text-cyan-400">ACTA</span>
-          </h1>
-          <p className="text-lg text-gray-300">
-            Acta is a digital contract platform built on Internet Computer, enabling secure, transparent, and permanent electronic signatures using blockchain technology.
-          </p>
-          <p className="text-gray-400 text-md">
-            Internet Identity is used for secure authentication. Signing and verification are handled via blockchain and crypto wallets for full decentralization.
-          </p>
-
-          <button
-            onClick={handleLogin}
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-indigo-600 px-6 py-3 rounded-full text-lg font-semibold hover:opacity-90 transition"
-          >
-            Get Started with Internet Identity →
-          </button>
+      {/* Header */}
+      <header className="relative z-10 w-full px-8 py-4 flex justify-between items-center border-b border-gray-800">
+        <div className="flex items-center gap-2">
+          <img src="/acta_logo.png" alt="ACTA Logo" className="h-8 w-auto" />
         </div>
+      </header>
 
-        {/* Right Section - Illustration */}
-        <div className="flex-1 relative">
-          <img
-            src="/acta-illustration.png"
-            alt="ACTA Digital Illustration"
-            className="w-[500px] drop-shadow-[0_0_60px_#00ffff44]"
-            style={{
-              animation: "pulse 4s ease-in-out infinite"
-            }}
-          />
+      {/* Main content */}
+      <div className="relative z-10 flex-1 px-6 py-16 flex items-center justify-center">
+        <div className="max-w-7xl w-full flex flex-col md:flex-row items-center gap-20">
+          {/* Left Section */}
+          <div className="flex-1 space-y-8">
+            <h1 className="text-5xl font-bold leading-tight">
+              Welcome to <br />
+              <span className="text-cyan-400">ACTA</span>
+            </h1>
+            <p className="text-lg text-gray-300">
+              Acta is a digital contract platform built on Internet Computer,
+              enabling secure, transparent, and permanent electronic signatures using blockchain technology.
+            </p>
+            <p className="text-gray-400 text-md">
+              Internet Identity is used for secure authentication. Signing and verification are handled via blockchain and crypto wallets for full decentralization.
+            </p>
+
+            <button
+              onClick={handleLogin}
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-indigo-600 px-6 py-3 rounded-full text-lg font-semibold hover:opacity-90 transition"
+            >
+              Get Started with Internet Identity →
+            </button>
+          </div>
+
+          {/* Right Section - Illustration */}
+          <div className="flex-1 relative">
+            <img
+              src="/acta-illustration.png"
+              alt="ACTA Digital Illustration"
+              className="w-[500px] drop-shadow-[0_0_60px_#00ffff44]"
+              style={{
+                animation: "pulse 4s ease-in-out infinite"
+              }}
+            />
+          </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="relative z-10 text-center text-gray-500 text-sm py-6 border-t border-gray-800">
+        © {new Date().getFullYear()} ACTA. All rights reserved.
+      </footer>
     </main>
   );
 }
