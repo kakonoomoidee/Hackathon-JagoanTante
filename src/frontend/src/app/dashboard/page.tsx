@@ -2,16 +2,15 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { AuthClient } from "@dfinity/auth-client";
+import { FaFileSignature } from 'react-icons/fa';
 
 export default function Dashboard() {
   const [principal, setPrincipal] = useState<string | null>(null);
   const [contracts, setContracts] = useState<any[]>([]);
   const [history, setHistory] = useState<any[]>([]);
   const [pdfFile, setPdfFile] = useState<File | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
   const [activeTab, setActiveTab] = useState<"sign" | "signed">("sign");
   const router = useRouter();
-
 
   useEffect(() => {
     const storedPrincipal = localStorage.getItem("principal");
@@ -37,35 +36,8 @@ export default function Dashboard() {
     ]);
   };
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    setPdfFile(file);
-  };
-
-  const handleUploadContract = async () => {
-    if (!pdfFile) return;
-    setIsUploading(true);
-    try {
-      const contractHash = await generateHashFromFile(pdfFile);
-      console.log("Uploaded contract hash:", contractHash);
-      setContracts([
-        ...contracts,
-        { id: contracts.length + 1, name: `Contract ${contracts.length + 1}`, status: "Pending" },
-      ]);
-      alert("Contract uploaded successfully!");
-    } catch (error) {
-      console.error("Upload error:", error);
-      alert("Upload failed.");
-    } finally {
-      setIsUploading(false);
-    }
-  };
-
-  const generateHashFromFile = async (file: File) => {
-    const arrayBuffer = await file.arrayBuffer();
-    const hashBuffer = await crypto.subtle.digest("SHA-256", arrayBuffer);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+  const handleCreateContract = () => {
+    router.push("/contract"); // Arahkan ke /contract
   };
 
   const handleSignContract = async (contractId: number) => {
@@ -79,7 +51,11 @@ export default function Dashboard() {
     );
     setHistory([
       ...history,
-      { ...signedContract, status: "Signed", signedDate: new Date().toISOString().split("T")[0] },
+      {
+        ...signedContract,
+        status: "Signed",
+        signedDate: new Date().toISOString().split("T")[0],
+      },
     ]);
   };
 
@@ -92,7 +68,6 @@ export default function Dashboard() {
   };
 
   return (
-
     <main className="min-h-screen bg-black text-white flex flex-col relative overflow-hidden">
       {/* Background glow */}
       <div className="absolute inset-0 bg-[radial-gradient(#00ffe055_1px,transparent_1px)] [background-size:24px_24px] z-0" />
@@ -113,8 +88,7 @@ export default function Dashboard() {
 
       {/* Content */}
       <div className="relative z-10 flex-1 px-6 py-12 flex flex-col lg:flex-row gap-12 lg:gap-x-24 max-w-6xl mx-auto">
-
-        {/* Kiri: Hello + Upload Contract */}
+        {/* Kiri: Hello */}
         <div className="space-y-6 flex-1">
           <h1 className="text-5xl font-bold leading-tight">
             Hello, <span className="text-cyan-400">{principal}</span>
@@ -122,21 +96,17 @@ export default function Dashboard() {
           <p className="text-gray-300">
             Upload and manage your digital contracts securely on the blockchain.
           </p>
-
-          <div className="bg-[#1e293b] p-6 rounded-xl shadow-lg">
-            <h2 className="text-2xl font-semibold mb-4">Upload Contract</h2>
-            <input
-              type="file"
-              accept="application/pdf"
-              onChange={handleFileUpload}
-              className="bg-[#0f172a] p-2 rounded w-full mb-4"
-            />
+          {/* Upload Contract Section */}
+          <div className="bg-[#1e293b] p-6 rounded-xl shadow-lg flex flex-col items-center">
+            <FaFileSignature className="text-4xl text-cyan-600 mb-4" />{" "}
+            <h2 className="text-2xl font-semibold text-white mb-4">
+              Create Contract
+            </h2>
             <button
-              onClick={handleUploadContract}
-              disabled={isUploading || !pdfFile}
-              className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-full transition"
+              onClick={handleCreateContract}
+              className="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-3 rounded-full transition"
             >
-              {isUploading ? "Uploading..." : "Upload Contract"}
+              Create Contract
             </button>
           </div>
         </div>
@@ -147,19 +117,21 @@ export default function Dashboard() {
           <div className="flex justify-start space-x-10 border-b border-gray-700 pb-4">
             <button
               onClick={() => setActiveTab("sign")}
-              className={`text-xl font-semibold transition pb-2 ${activeTab === "sign"
+              className={`text-xl font-semibold transition pb-2 ${
+                activeTab === "sign"
                   ? "border-b-2 border-cyan-400 text-white"
                   : "text-gray-400 hover:text-white"
-                }`}
+              }`}
             >
               Contracts to Sign
             </button>
             <button
               onClick={() => setActiveTab("signed")}
-              className={`text-xl font-semibold transition pb-2 ${activeTab === "signed"
+              className={`text-xl font-semibold transition pb-2 ${
+                activeTab === "signed"
                   ? "border-b-2 border-cyan-400 text-white"
                   : "text-gray-400 hover:text-white"
-                }`}
+              }`}
             >
               Signed Contracts
             </button>
@@ -169,20 +141,29 @@ export default function Dashboard() {
           <div>
             {activeTab === "sign" ? (
               <div className="space-y-6">
-                {contracts.filter((c) => c.status === "Pending").length === 0 ? (
-                  <p className="text-gray-400 text-center">No pending contracts.</p>
+                {contracts.filter((c) => c.status === "Pending").length ===
+                0 ? (
+                  <p className="text-gray-400 text-center">
+                    No pending contracts.
+                  </p>
                 ) : (
                   contracts
                     .filter((c) => c.status === "Pending")
                     .map((contract) => (
-                      <ContractCard key={contract.id} contract={contract} onSign={handleSignContract} />
+                      <ContractCard
+                        key={contract.id}
+                        contract={contract}
+                        onSign={handleSignContract}
+                      />
                     ))
                 )}
               </div>
             ) : (
               <div className="space-y-6">
                 {history.length === 0 ? (
-                  <p className="text-gray-400 text-center">No signed contracts yet.</p>
+                  <p className="text-gray-400 text-center">
+                    No signed contracts yet.
+                  </p>
                 ) : (
                   history.map((contract) => (
                     <HistoryCard key={contract.id} contract={contract} />
@@ -200,7 +181,6 @@ export default function Dashboard() {
       </footer>
     </main>
   );
-
 }
 
 function ContractCard({
@@ -220,12 +200,11 @@ function ContractCard({
         onClick={() => onSign(contract.id)}
         className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-1.5 text-sm rounded-full transition"
       >
-        Sign
+        Read
       </button>
     </div>
   );
 }
-
 
 function HistoryCard({ contract }: { contract: any }) {
   return (
@@ -235,7 +214,9 @@ function HistoryCard({ contract }: { contract: any }) {
         <p className="text-gray-400 text-sm">Status: {contract.status}</p>
       </div>
       <p className="text-gray-500 text-sm text-right">
-        Signed on:<br />{contract.signedDate}
+        Signed on:
+        <br />
+        {contract.signedDate}
       </p>
     </div>
   );
