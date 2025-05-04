@@ -9,7 +9,9 @@ export default function Dashboard() {
   const [history, setHistory] = useState<any[]>([]);
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [activeTab, setActiveTab] = useState<"sign" | "signed">("sign");
   const router = useRouter();
+
 
   useEffect(() => {
     const storedPrincipal = localStorage.getItem("principal");
@@ -90,6 +92,7 @@ export default function Dashboard() {
   };
 
   return (
+
     <main className="min-h-screen bg-black text-white flex flex-col relative overflow-hidden">
       {/* Background glow */}
       <div className="absolute inset-0 bg-[radial-gradient(#00ffe055_1px,transparent_1px)] [background-size:24px_24px] z-0" />
@@ -102,17 +105,17 @@ export default function Dashboard() {
         </div>
         <button
           onClick={handleLogout}
-          className="rounded-md bg-transparent text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-600 font-semibold transition hover:opacity-80 border-4 border-transparent border-[1px] border-t-transparent border-b-transparent border-l-transparent border-r-transparent">
+          className="rounded-md bg-transparent text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-600 font-semibold transition hover:opacity-80 border border-transparent"
+        >
           Logout
         </button>
       </header>
 
-
-
       {/* Content */}
-      <div className="relative z-10 flex-1 px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-12">
-        {/* Left Column */}
-        <div className="space-y-6">
+      <div className="relative z-10 flex-1 px-6 py-12 flex flex-col lg:flex-row gap-12 lg:gap-x-24 max-w-6xl mx-auto">
+
+        {/* Kiri: Hello + Upload Contract */}
+        <div className="space-y-6 flex-1">
           <h1 className="text-5xl font-bold leading-tight">
             Hello, <span className="text-cyan-400">{principal}</span>
           </h1>
@@ -120,7 +123,6 @@ export default function Dashboard() {
             Upload and manage your digital contracts securely on the blockchain.
           </p>
 
-          {/* Upload Contract */}
           <div className="bg-[#1e293b] p-6 rounded-xl shadow-lg">
             <h2 className="text-2xl font-semibold mb-4">Upload Contract</h2>
             <input
@@ -139,30 +141,56 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Middle Column */}
-        <div className="space-y-6">
-          <h2 className="text-2xl font-semibold text-white">Contracts to Sign</h2>
-          {contracts.filter(c => c.status === "Pending").length === 0 ? (
-            <p className="text-gray-400">No pending contracts.</p>
-          ) : (
-            contracts
-              .filter((c) => c.status === "Pending")
-              .map((contract) => (
-                <ContractCard key={contract.id} contract={contract} onSign={handleSignContract} />
-              ))
-          )}
-        </div>
+        {/* Kanan: Tabs + Contract Content */}
+        <div className="flex-1 space-y-6">
+          {/* Tab Header */}
+          <div className="flex justify-start space-x-10 border-b border-gray-700 pb-4">
+            <button
+              onClick={() => setActiveTab("sign")}
+              className={`text-xl font-semibold transition pb-2 ${activeTab === "sign"
+                  ? "border-b-2 border-cyan-400 text-white"
+                  : "text-gray-400 hover:text-white"
+                }`}
+            >
+              Contracts to Sign
+            </button>
+            <button
+              onClick={() => setActiveTab("signed")}
+              className={`text-xl font-semibold transition pb-2 ${activeTab === "signed"
+                  ? "border-b-2 border-cyan-400 text-white"
+                  : "text-gray-400 hover:text-white"
+                }`}
+            >
+              Signed Contracts
+            </button>
+          </div>
 
-        {/* Right Column */}
-        <div className="space-y-6">
-          <h2 className="text-2xl font-semibold text-white">Signed Contracts</h2>
-          {history.length === 0 ? (
-            <p className="text-gray-400">No signed contracts yet.</p>
-          ) : (
-            history.map((contract) => (
-              <HistoryCard key={contract.id} contract={contract} />
-            ))
-          )}
+          {/* Tab Content */}
+          <div>
+            {activeTab === "sign" ? (
+              <div className="space-y-6">
+                {contracts.filter((c) => c.status === "Pending").length === 0 ? (
+                  <p className="text-gray-400 text-center">No pending contracts.</p>
+                ) : (
+                  contracts
+                    .filter((c) => c.status === "Pending")
+                    .map((contract) => (
+                      <ContractCard key={contract.id} contract={contract} onSign={handleSignContract} />
+                    ))
+                )}
+              </div>
+            ) : (
+              <div className="space-y-6">
+                {history.length === 0 ? (
+                  <p className="text-gray-400 text-center">No signed contracts yet.</p>
+                ) : (
+                  history.map((contract) => (
+                    <HistoryCard key={contract.id} contract={contract} />
+                  ))
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -172,9 +200,9 @@ export default function Dashboard() {
       </footer>
     </main>
   );
+
 }
 
-// Card Components
 function ContractCard({
   contract,
   onSign,
@@ -183,25 +211,32 @@ function ContractCard({
   onSign: (contractId: number) => void;
 }) {
   return (
-    <div className="bg-[#1e293b] p-5 rounded-lg shadow hover:shadow-lg transition">
-      <h3 className="text-lg font-semibold text-white">{contract.name}</h3>
-      <p className="text-gray-400">Status: {contract.status}</p>
+    <div className="bg-[#1e293b] px-6 py-4 rounded-lg shadow hover:shadow-lg transition flex justify-between items-center">
+      <div>
+        <h3 className="text-white text-base font-medium">{contract.name}</h3>
+        <p className="text-gray-400 text-sm">Status: {contract.status}</p>
+      </div>
       <button
         onClick={() => onSign(contract.id)}
-        className="mt-4 bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-full transition"
+        className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-1.5 text-sm rounded-full transition"
       >
-        Sign Contract
+        Sign
       </button>
     </div>
   );
 }
 
+
 function HistoryCard({ contract }: { contract: any }) {
   return (
-    <div className="bg-[#1e293b] p-5 rounded-lg shadow">
-      <h3 className="text-lg font-semibold text-white">{contract.name}</h3>
-      <p className="text-gray-400">Status: {contract.status}</p>
-      <p className="text-gray-500 text-sm">Signed on: {contract.signedDate}</p>
+    <div className="bg-[#1e293b] px-6 py-4 rounded-lg shadow flex justify-between items-center">
+      <div>
+        <h3 className="text-white text-base font-medium">{contract.name}</h3>
+        <p className="text-gray-400 text-sm">Status: {contract.status}</p>
+      </div>
+      <p className="text-gray-500 text-sm text-right">
+        Signed on:<br />{contract.signedDate}
+      </p>
     </div>
   );
 }
