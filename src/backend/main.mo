@@ -25,8 +25,13 @@ actor Main {
     await service.signContract(id, caller);
   };
 
-public shared func list() : async [Types.Contract] {
+  public shared func list() : async [Types.Contract] {
   let service = await getService();
   await service.getContracts();
-};
+  };
+
+  public shared func downloadFile(id: Nat) : async Blob {
+  let service = await getService();
+  await service.getFile(id);
+  };
 }

@@ -94,4 +94,19 @@ shared({}) actor class ContractService() = this {
   public query func getContracts() : async [Types.Contract] {
     Iter.toArray(Map.vals(contractsMap));
   };
+
+  public query func getFile(id: Nat) : async Blob {
+  switch (Map.get(contractsMap, hashUtils, id)) {
+    case null {
+      Debug.trap("Kontrak tidak ditemukan.");
+    };
+    case (?contract) {
+      if (Array.size(contract.chunk) == 0) {
+        Debug.trap("File kosong.");
+      };
+      contract.chunk[0].chunk;
+    }
+  }
+};
+
 }
