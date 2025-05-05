@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Footer from "@/components/footer";
+import Header from '@/components/header';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilePdf } from "@fortawesome/free-solid-svg-icons";
 
@@ -34,11 +35,7 @@ export default function SignPage() {
       <div className="absolute inset-0 bg-gradient-to-br from-[#020409] to-[#0f172a] opacity-80 z-0" />
 
       {/* Header */}
-      <header className="relative z-10 w-full px-8 py-4 flex justify-between items-center border-b border-gray-800">
-        <div className="flex items-center gap-2">
-          <img src="/acta_logo.png" alt="ACTA Logo" className="h-8 w-auto" />
-        </div>
-      </header>
+      <Header />
 
       {/* Contract Section */}
       <section className="relative z-10 px-6 py-10 flex justify-center items-center grow">

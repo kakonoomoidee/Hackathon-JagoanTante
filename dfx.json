@@ -28,6 +28,17 @@
       "packtool": "mops sources"
     }
   },
+  "networks": {
+    "mainnet": {
+      "type": "persistent",
+      "providers": ["https://ic0.app"]
+    },
+    "local": {
+      "type": "ephemeral",
+      "host": "http://127.0.0.1:8000"
+    }
+  },
+
   "output_env_file": ".env",
   "version": 1
 }

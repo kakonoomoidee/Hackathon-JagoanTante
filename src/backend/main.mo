@@ -1,37 +1,34 @@
 import ContractService "contract";
 import Types "types";
 import Blob "mo:base/Blob";
-import Cycles "mo:base/ExperimentalCycles";
-
 
 actor Main {
 
   let getService = ContractService.ContractService;
-  Cycles.add<system>(230_949_972_000);
 
   public shared ({ caller }) func createContract(
-    name: Text,
-    description: Text,
-    participants: [Principal],
+    name : Text,
+    description : Text,
+    participants : [Principal],
     chunk : Blob,
-    createdAt: Int,
+    createdAt : Int,
   ) : async Nat {
     let service = await getService();
     await service.createContract(caller, name, chunk, createdAt, description, participants);
   };
 
-  public shared ({ caller }) func sign(id: Nat) : async () {
+  public shared ({ caller }) func sign(id : Nat) : async () {
     let service = await getService();
     await service.signContract(id, caller);
   };
 
   public shared func list() : async [Types.Contract] {
-  let service = await getService();
-  await service.getContracts();
+    let service = await getService();
+    await service.getContracts();
   };
 
-  public shared func downloadFile(id: Nat) : async Blob {
-  let service = await getService();
-  await service.getFile(id);
+  public shared func downloadFile(id : Nat) : async Blob {
+    let service = await getService();
+    await service.getFile(id);
   };
-}
+};
