@@ -130,7 +130,7 @@ export default function ContractPage() {
 
       {/* Form Card */}
       <section className="relative z-10 px-6 py-10 flex justify-center items-center grow">
-        <div className="bg-white/10 border border-white/20 backdrop-blur-[10px] bg-opacity-20 rounded-2xl p-6 max-w-3xl w-full shadow-lg space-y-6">
+        <div className="bg-[#1e293b] backdrop-blur-[10px] bg-opacity-20 rounded-2xl p-6 max-w-3xl w-full shadow-lg space-y-6">
           <h2 className="text-2xl font-bold text-white">Create New Contract</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4 flex flex-col">
