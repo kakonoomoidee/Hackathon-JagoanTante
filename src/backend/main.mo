@@ -8,10 +8,12 @@ actor Main {
   public shared ({ caller }) func createContract(
     name: Text,
     description: Text,
-    participants: [Principal]
+    participants: [Principal],
+    fileCid: Text,
+    createdAt: Int,
   ) : async Nat {
     let service = await getService();
-    await service.createContract(caller, name, description, participants);
+    await service.createContract(caller, name, fileCid, createdAt, description, participants);
   };
 
   public shared ({ caller }) func sign(id: Nat) : async () {
