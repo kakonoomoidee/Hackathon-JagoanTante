@@ -210,7 +210,7 @@ function HistoryCard({ contract }: { contract: any }) {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/contract/${contract.id}`); // arahkan ke detail kontrak
+    router.push(`/details/${contract.id}`); // arahkan ke detail kontrak
   };
 
   return (
