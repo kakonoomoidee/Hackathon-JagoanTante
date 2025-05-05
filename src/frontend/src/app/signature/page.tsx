@@ -84,7 +84,7 @@ export default function SignPage() {
           <div className="pt-4">
             {isSigned ? (
               <button
-                className="bg-green-600 text-white px-6 py-3 rounded-md w-full cursor-not-allowed"
+                className="border text-cyan-500 px-6 py-3 rounded-md w-full cursor-not-allowed"
                 disabled
               >
                 Contract Signed
