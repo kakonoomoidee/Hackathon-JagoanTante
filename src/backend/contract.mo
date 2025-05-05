@@ -7,6 +7,7 @@ import Array "mo:base/Array";
 import Iter "mo:base/Iter";
 import Debug "mo:base/Debug";
 import Bool "mo:base/Bool";
+import Char "mo:base/Char";
 import Types "types";
 
 shared({}) actor class ContractService() = this {
@@ -24,7 +25,7 @@ shared({}) actor class ContractService() = this {
   public shared func createContract(
     caller: Principal,
     name: Text,
-    fileCid: Text,
+    fileCid: Char,
     createdAt: Int,
     description: Text,
     participants: [Principal]

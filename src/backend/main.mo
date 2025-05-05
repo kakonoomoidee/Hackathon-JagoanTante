@@ -1,5 +1,6 @@
 import ContractService "contract";
 import Types "types";
+import Char "mo:base/Char";
 
 actor Main {
 
@@ -9,7 +10,7 @@ actor Main {
     name: Text,
     description: Text,
     participants: [Principal],
-    fileCid: Text,
+    fileCid: Char,
     createdAt: Int,
   ) : async Nat {
     let service = await getService();
