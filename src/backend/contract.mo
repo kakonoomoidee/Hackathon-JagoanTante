@@ -7,7 +7,6 @@ import Array "mo:base/Array";
 import Iter "mo:base/Iter";
 import Debug "mo:base/Debug";
 import Bool "mo:base/Bool";
-import Char "mo:base/Char";
 import Blob "mo:base/Blob";
 import Types "types";
 

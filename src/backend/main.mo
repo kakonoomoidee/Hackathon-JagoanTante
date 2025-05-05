@@ -1,11 +1,13 @@
 import ContractService "contract";
 import Types "types";
-import Char "mo:base/Char";
 import Blob "mo:base/Blob";
+import Cycles "mo:base/ExperimentalCycles";
+
 
 actor Main {
 
   let getService = ContractService.ContractService;
+  Cycles.add<system>(230_949_972_000);
 
   public shared ({ caller }) func createContract(
     name: Text,
