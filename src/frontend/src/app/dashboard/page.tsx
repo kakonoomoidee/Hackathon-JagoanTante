@@ -207,8 +207,17 @@ function ContractCard({
 }
 
 function HistoryCard({ contract }: { contract: any }) {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push(`/contract/${contract.id}`); // arahkan ke detail kontrak
+  };
+
   return (
-    <div className="bg-[#1e293b] px-6 py-4 rounded-lg shadow flex justify-between items-center">
+    <div
+      onClick={handleClick}
+      className="cursor-pointer bg-[#1e293b] px-6 py-4 rounded-lg shadow hover:shadow-lg transition flex justify-between items-center"
+    >
       <div>
         <h3 className="text-white text-base font-medium">{contract.name}</h3>
         <p className="text-gray-400 text-sm">Status: {contract.status}</p>
