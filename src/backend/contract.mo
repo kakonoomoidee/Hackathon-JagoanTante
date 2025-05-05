@@ -8,6 +8,7 @@ import Iter "mo:base/Iter";
 import Debug "mo:base/Debug";
 import Bool "mo:base/Bool";
 import Char "mo:base/Char";
+import Blob "mo:base/Blob";
 import Types "types";
 
 shared({}) actor class ContractService() = this {
@@ -25,7 +26,7 @@ shared({}) actor class ContractService() = this {
   public shared func createContract(
     caller: Principal,
     name: Text,
-    fileCid: Char,
+    chunk: Blob,
     createdAt: Int,
     description: Text,
     participants: [Principal]
@@ -37,7 +38,7 @@ shared({}) actor class ContractService() = this {
       id = id;
       name = name;
       description = description;
-      fileCid = fileCid;
+      chunk = [{ chunk = chunk; index = 0 }];
       createdAt = createdAt;
       creator = caller;
       participants = participants;

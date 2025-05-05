@@ -8,7 +8,7 @@ module {
     id: Nat;
     name: Text;
     description: Text;
-    fileCid: Char;
+    chunk: [FileChunk];
     createdAt: Int;
     creator: Principal;
     participants: [Principal];

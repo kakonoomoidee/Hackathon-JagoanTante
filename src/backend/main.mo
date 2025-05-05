@@ -1,6 +1,7 @@
 import ContractService "contract";
 import Types "types";
 import Char "mo:base/Char";
+import Blob "mo:base/Blob";
 
 actor Main {
 
@@ -10,11 +11,11 @@ actor Main {
     name: Text,
     description: Text,
     participants: [Principal],
-    fileCid: Char,
+    chunk : Blob,
     createdAt: Int,
   ) : async Nat {
     let service = await getService();
-    await service.createContract(caller, name, fileCid, createdAt, description, participants);
+    await service.createContract(caller, name, chunk, createdAt, description, participants);
   };
 
   public shared ({ caller }) func sign(id: Nat) : async () {
