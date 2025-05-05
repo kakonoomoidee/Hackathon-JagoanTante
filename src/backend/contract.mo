@@ -24,6 +24,8 @@ shared({}) actor class ContractService() = this {
   public shared func createContract(
     caller: Principal,
     name: Text,
+    fileCid: Text,
+    createdAt: Int,
     description: Text,
     participants: [Principal]
   ) : async Nat {
@@ -34,6 +36,8 @@ shared({}) actor class ContractService() = this {
       id = id;
       name = name;
       description = description;
+      fileCid = fileCid;
+      createdAt = createdAt;
       creator = caller;
       participants = participants;
       signed = [];
