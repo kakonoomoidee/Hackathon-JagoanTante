@@ -2,8 +2,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { AuthClient } from "@dfinity/auth-client";
-import { FaFileSignature } from 'react-icons/fa';
-import Footer from '@/components/footer';
+import { FaFileSignature } from "react-icons/fa";
+import Footer from "@/components/footer";
 
 export default function Dashboard() {
   const [principal, setPrincipal] = useState<string | null>(null);
@@ -177,30 +177,31 @@ export default function Dashboard() {
 
       {/* Footer */}
       <Footer />
-
     </main>
   );
 }
 
 function ContractCard({
   contract,
-  onSign,
 }: {
   contract: any;
   onSign: (contractId: number) => void;
 }) {
+  const router = useRouter();
+
+  const handleCardClick = () => {
+    router.push(`/signature/${contract.id}`);
+  };
+
   return (
-    <div className="bg-[#1e293b] px-6 py-4 rounded-lg shadow hover:shadow-lg transition flex justify-between items-center">
+    <div
+      onClick={handleCardClick}
+      className="cursor-pointer bg-[#1e293b] px-6 py-4 rounded-lg shadow hover:shadow-lg transition flex justify-between items-center"
+    >
       <div>
         <h3 className="text-white text-base font-medium">{contract.name}</h3>
         <p className="text-gray-400 text-sm">Status: {contract.status}</p>
       </div>
-      <button
-        onClick={() => onSign(contract.id)}
-        className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-1.5 text-sm rounded-full transition"
-      >
-        Read
-      </button>
     </div>
   );
 }
