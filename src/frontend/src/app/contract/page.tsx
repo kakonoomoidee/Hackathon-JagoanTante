@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import Footer from "@/components/footer";
 import Header from "@/components/header";
+import { backend } from "../../../../declarations/backend";
+import { Principal } from "@dfinity/principal";
 
 export default function ContractPage() {
   const [fileObj, setFileObj] = useState<File | null>(null);
@@ -58,12 +60,12 @@ export default function ContractPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     console.log("📝 Submitting contract...");
     setErrors({});
     setFileError("");
     const newErrors: { [key: string]: string } = {};
-  
+
     if (!contractName) newErrors.contractName = "Contract name is required.";
     else if (contractName.length > 255)
       newErrors.contractName = "Contract name cannot exceed 255 characters.";
@@ -76,45 +78,34 @@ export default function ContractPage() {
     else if (fileError) newErrors.file = fileError;
     if (participants.some((id) => !id))
       newErrors.participants = "All participant IDs must be filled.";
-  
-    console.log("📦 Participants received:", participants);
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-  
+
     try {
       if (!fileObj) {
         setFileError("PDF file is required.");
         return;
       }
-  
+
       const arrayBuffer = await fileObj.arrayBuffer();
-      const byteArray = Array.from(new Uint8Array(arrayBuffer));
-      const createdAt = Date.now();
-  
-      const res = await fetch("/api/contract", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: contractName,
-          description: contractDescription,
-          participants,
-          fileData: byteArray,
-          createdAt,
-        }),
-      });
-  
-      const data = await res.json();
-  
-      if (!res.ok) {
-        throw new Error(data.error || "Unknown error");
-      }
-  
-      console.log("✅ Contract created:", data.contractId);
-  
+      const fileBuffer = new Uint8Array(arrayBuffer);
+      const createdAt = BigInt(Date.now());
+
+      const principalArray = participants.map((id) => Principal.fromText(id));
+
+      const contractId = await backend.createContract(
+        contractName,
+        contractDescription,
+        principalArray,
+        fileBuffer,
+        createdAt
+      );
+
+      console.log("✅ Contract created:", contractId);
+
       setContractName("");
       setContractDescription("");
       setFileName("");
@@ -122,7 +113,7 @@ export default function ContractPage() {
       setParticipants([""]);
       setErrors({});
       setFileError("");
-      alert(`Contract created! ID: ${data.contractId}`);
+      alert(`Contract created! ID: ${contractId}`);
     } catch (err: any) {
       console.error("❌ Error creating contract:", err);
       setErrors({
