@@ -1,3 +1,5 @@
+![Project Logo](https://github.com/kakonoomoidee/Hackathon-JagoanTante/blob/master/src/frontend/public/acta_logo.png)
+
 ### Introduction
 ``ACTA`` is a decentralized digital contract platform designed for the general public, enabling users to securely create, sign, and manage legally binding agreements using the Internet Computer Protocol (ICP). The system leverages Internet Identity (II) for secure authentication and ensures that only the participants of a contract are aware of its existence and contents. For example, if user A creates a contract with user B, user C will have no visibility into that contract — ensuring privacy and confidentiality.
 ### Features
