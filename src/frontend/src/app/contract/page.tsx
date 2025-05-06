@@ -4,6 +4,9 @@ import { useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import Footer from "@/components/footer";
 import Header from "@/components/header";
+import { backend  } from "../../../../declarations/backend";
+import { Principal } from "@dfinity/principal";
+
 
 export default function ContractPage() {
   const [fileObj, setFileObj] = useState<File | null>(null);
@@ -77,7 +80,6 @@ export default function ContractPage() {
     if (participants.some((id) => !id))
       newErrors.participants = "All participant IDs must be filled.";
   
-    console.log("📦 Participants received:", participants);
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
@@ -90,30 +92,20 @@ export default function ContractPage() {
       }
   
       const arrayBuffer = await fileObj.arrayBuffer();
-      const byteArray = Array.from(new Uint8Array(arrayBuffer));
-      const createdAt = Date.now();
+      const fileBuffer = new Uint8Array(arrayBuffer);
+      const createdAt = BigInt(Date.now());
   
-      const res = await fetch("/api/contract", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: contractName,
-          description: contractDescription,
-          participants,
-          fileData: byteArray,
-          createdAt,
-        }),
-      });
+      const principalArray = participants.map((id) => Principal.fromText(id));
   
-      const data = await res.json();
+      const contractId = await backend.createContract(
+        contractName,
+        contractDescription,
+        principalArray,
+        fileBuffer,
+        createdAt
+      );
   
-      if (!res.ok) {
-        throw new Error(data.error || "Unknown error");
-      }
-  
-      console.log("✅ Contract created:", data.contractId);
+      console.log("✅ Contract created:", contractId);
   
       setContractName("");
       setContractDescription("");
@@ -122,7 +114,7 @@ export default function ContractPage() {
       setParticipants([""]);
       setErrors({});
       setFileError("");
-      alert(`Contract created! ID: ${data.contractId}`);
+      alert(`Contract created! ID: ${contractId}`);
     } catch (err: any) {
       console.error("❌ Error creating contract:", err);
       setErrors({
