@@ -6,13 +6,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilePdf } from "@fortawesome/free-solid-svg-icons";
 
 export default function SignPage() {
-  const [contractName] = useState("Example NDA Agreement");
+  const [contractName] = useState("Freelance Agreement - Designer");
   const [contractDescription] = useState(
-    "This contract outlines the terms of the non-disclosure agreement between participants."
+    "Agreement outlining project scope and payment terms."
   );
   const [participants] = useState<string[]>([
-    "0x123abc...def",
-    "0x456def...abc",
+    "gcdsh-gerfu-7spzv-stj6v-677xr-gkev6-6cahf-a5opz-khg76-mrpz5-3ae",
+    "adjsa-vvi7x-ay4sk-7zcim-hfd7c-3iffd-jdaw6-luz6b-j435p-o2uuu-rae",
   ]);
   const [isSigned, setIsSigned] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);

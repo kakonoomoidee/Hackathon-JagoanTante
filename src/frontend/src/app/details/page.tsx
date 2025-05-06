@@ -5,28 +5,16 @@ import Header from '@/components/header';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilePdf } from "@fortawesome/free-solid-svg-icons";
 
-export default function SignPage() {
-  const [contractName] = useState("Example NDA Agreement");
+export default function DetailsPage() {
+  const [contractName] = useState("NDA with Alpha Inc.");
   const [contractDescription] = useState(
-    "This contract outlines the terms of the non-disclosure agreement between participants."
+    "Non-disclosure agreement for partnership discussions."
   );
   const [participants] = useState<string[]>([
-    "0x123abc...def",
-    "0x456def...abc",
+    "dfkou-vvi7x-ay4sk-7zcim-hfpll-3iffd-jdaw6-luz6b-j435p-o2uuu-rae",
+    "gcdsh-gerfu-7spzv-stj6v-677xr-gkev6-6cahf-a5opz-khg76-mrpz5-3ae",
   ]);
-  const [isSigned, setIsSigned] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
-
-  const handleSign = () => {
-    console.log("Contract signed!");
-    setIsSigned(true);
-  };
-
-  const handleConfirmSign = () => {
-    setIsSigned(true);
-    setShowConfirm(false);
-    handleSign();
-  };
+  const [signedDate] = useState("2025-05-01"); // Tambahkan tanggal signed di sini
 
   return (
     <main className="min-h-screen bg-black text-white flex flex-col relative overflow-hidden">
@@ -40,23 +28,33 @@ export default function SignPage() {
       {/* Contract Section */}
       <section className="relative z-10 px-6 py-10 flex justify-center items-center grow">
         <div className="bg-[#1e293b] backdrop-blur-[10px] bg-opacity-20 rounded-2xl p-6 max-w-3xl w-full shadow-lg space-y-6">
-          <h2 className="text-2xl font-bold text-white">Sign Contract</h2>
+          <h2 className="text-2xl font-bold text-white">Contract Details</h2>
 
           {/* Detail */}
-          <div className="space-y-3">
-            <div>
-              <p className="text-sm text-gray-400">Contract Name:</p>
-              <p className="text-base font-semibold">{contractName}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm text-gray-300">
+
+            <div className="bg-[#0f172a] p-4 rounded-lg border border-gray-700 shadow-sm">
+              <p className="text-gray-400 mb-1">Contract Name</p>
+              <p className="text-white font-medium">{contractName}</p>
             </div>
-            <div>
-              <p className="text-sm text-gray-400">Description:</p>
-              <p className="text-base">{contractDescription}</p>
+
+
+            <div className="bg-[#0f172a] p-4 rounded-lg border border-gray-700 shadow-sm">
+              <p className="text-gray-400 mb-1">Signed Date</p>
+              <p className="text-white font-medium">{signedDate}</p>
             </div>
-            <div>
-              <p className="text-sm text-gray-400">Participants:</p>
-              <ul className="list-disc pl-5 text-base">
+
+
+            <div className="bg-[#0f172a] p-4 rounded-lg border border-gray-700 shadow-sm col-span-full">
+              <p className="text-gray-400 mb-1">Description</p>
+              <p className="text-white font-medium">{contractDescription}</p>
+            </div>
+
+            <div className="bg-[#0f172a] p-4 rounded-lg border border-gray-700 shadow-sm col-span-full">
+              <p className="text-gray-400 mb-1">Participants</p>
+              <ul className="list-disc pl-5 text-white space-y-1">
                 {participants.map((p, i) => (
-                  <li key={i}>{p}</li>
+                  <li key={i} className="break-words">{p}</li>
                 ))}
               </ul>
             </div>

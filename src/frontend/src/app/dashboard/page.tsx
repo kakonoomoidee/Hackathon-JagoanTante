@@ -25,14 +25,14 @@ export default function Dashboard() {
 
   const fetchContracts = () => {
     setContracts([
-      { id: 1, name: "Contract 1", status: "Pending" },
-      { id: 2, name: "Contract 2", status: "Signed" },
+      { id: 1, name: "Freelance Agreement - Designer", status: "Pending" },
+      { id: 3, name: "Partnership MoU", status: "Pending" },
     ]);
   };
 
   const fetchHistory = () => {
     setHistory([
-      { id: 2, name: "Contract 2", status: "Signed", signedDate: "2025-05-01" },
+      { id: 2, name: "NDA with Alpha Inc.", status: "Signed", signedDate: "2025-05-01" },
     ]);
   };
 
@@ -117,21 +117,19 @@ export default function Dashboard() {
           <div className="flex justify-start space-x-10 border-b border-gray-700 pb-4">
             <button
               onClick={() => setActiveTab("sign")}
-              className={`text-xl font-semibold transition pb-2 ${
-                activeTab === "sign"
+              className={`text-xl font-semibold transition pb-2 ${activeTab === "sign"
                   ? "border-b-2 border-cyan-400 text-white"
                   : "text-gray-400 hover:text-white"
-              }`}
+                }`}
             >
               Contracts to Sign
             </button>
             <button
               onClick={() => setActiveTab("signed")}
-              className={`text-xl font-semibold transition pb-2 ${
-                activeTab === "signed"
+              className={`text-xl font-semibold transition pb-2 ${activeTab === "signed"
                   ? "border-b-2 border-cyan-400 text-white"
                   : "text-gray-400 hover:text-white"
-              }`}
+                }`}
             >
               Signed Contracts
             </button>
@@ -142,7 +140,7 @@ export default function Dashboard() {
             {activeTab === "sign" ? (
               <div className="space-y-6">
                 {contracts.filter((c) => c.status === "Pending").length ===
-                0 ? (
+                  0 ? (
                   <p className="text-gray-400 text-center">
                     No pending contracts.
                   </p>
@@ -190,7 +188,7 @@ function ContractCard({
   const router = useRouter();
 
   const handleCardClick = () => {
-    router.push(`/signature/${contract.id}`);
+    router.push(`/signature`);
   };
 
   return (
@@ -210,7 +208,7 @@ function HistoryCard({ contract }: { contract: any }) {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/details/${contract.id}`); // arahkan ke detail kontrak
+    router.push(`/details`); // arahkan ke detail kontrak
   };
 
   return (
