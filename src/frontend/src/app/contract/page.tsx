@@ -4,8 +4,9 @@ import { useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import Footer from "@/components/footer";
 import Header from "@/components/header";
-import { backend } from "../../../../declarations/backend";
+import { backend  } from "../../../../declarations/backend";
 import { Principal } from "@dfinity/principal";
+
 
 export default function ContractPage() {
   const [fileObj, setFileObj] = useState<File | null>(null);
@@ -60,12 +61,12 @@ export default function ContractPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     console.log("📝 Submitting contract...");
     setErrors({});
     setFileError("");
     const newErrors: { [key: string]: string } = {};
-
+  
     if (!contractName) newErrors.contractName = "Contract name is required.";
     else if (contractName.length > 255)
       newErrors.contractName = "Contract name cannot exceed 255 characters.";
@@ -78,24 +79,24 @@ export default function ContractPage() {
     else if (fileError) newErrors.file = fileError;
     if (participants.some((id) => !id))
       newErrors.participants = "All participant IDs must be filled.";
-
+  
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-
+  
     try {
       if (!fileObj) {
         setFileError("PDF file is required.");
         return;
       }
-
+  
       const arrayBuffer = await fileObj.arrayBuffer();
       const fileBuffer = new Uint8Array(arrayBuffer);
       const createdAt = BigInt(Date.now());
-
+  
       const principalArray = participants.map((id) => Principal.fromText(id));
-
+  
       const contractId = await backend.createContract(
         contractName,
         contractDescription,
@@ -103,9 +104,9 @@ export default function ContractPage() {
         fileBuffer,
         createdAt
       );
-
+  
       console.log("✅ Contract created:", contractId);
-
+  
       setContractName("");
       setContractDescription("");
       setFileName("");
